@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "809385533224",
+    "project_id": "shoppy-da710",
+    "storage_bucket": "shoppy-da710.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:809385533224:android:c0ebd345a32a32bb0aba1d",
+        "android_client_info": {
+          "package_name": "com.example.shoppy"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAihuOyaoZpJJD1po0gfyxONa-7u2vEriI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
