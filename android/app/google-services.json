@@ -12,7 +12,20 @@
           "package_name": "com.example.shoppy"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "809385533224-3ifns948tu4b3kenmovri47mbhm5ec4a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.shoppy",
+            "certificate_hash": "119ee670cd77634815a756a86fffdd31e5cf013c"
+          }
+        },
+        {
+          "client_id": "809385533224-26ufspkqeg1nqcpg30js5s745j94nvgv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAihuOyaoZpJJD1po0gfyxONa-7u2vEriI"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "809385533224-26ufspkqeg1nqcpg30js5s745j94nvgv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "809385533224-fb3j2167mgetsdg2isn32hdj19gie46i.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.shoppy"
+              }
+            }
+          ]
         }
       }
     }

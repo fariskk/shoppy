@@ -2,7 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppy/core/common/common_widgets.dart';
+import 'package:shoppy/features/home/presentation/screens/category_screen.dart';
 import 'package:shoppy/features/home/presentation/state/cubit/home_ui_cubit.dart';
+import 'package:shoppy/features/payment/presentation/screens/payment_screen.dart';
+import 'package:shoppy/features/product_display/presentation/screens/product-screen.dart';
 import 'package:star_rating/star_rating.dart';
 
 //home screen navigation bar
@@ -66,7 +69,14 @@ class HomePage extends StatelessWidget {
                 ),
                 myText(text: "Shoppy", size: 22, fontWeight: FontWeight.bold),
                 Expanded(child: SizedBox()),
-                IconButton(onPressed: () {}, icon: Icon(Icons.search))
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ProductScreen()));
+                    },
+                    icon: Icon(Icons.search))
               ],
             ),
             CarouselSlider.builder(
@@ -413,17 +423,14 @@ class ProfilePage extends StatelessWidget {
                         offset: Offset(0, 3))
                   ]),
               child: ListTile(
-                  leading: Container(
-                    height: 60,
-                    width: 60,
-                    child: Image.asset(
-                      "assets/images/background_image2.jpg",
-                      fit: BoxFit.cover,
-                    ),
+                  title: myText(
+                    text: "Name : Gia Bogini",
+                    color: Colors.grey,
                   ),
-                  title: Text("Gia Bogini"),
                   subtitle: myText(
-                      text: "faris@gmail.com", color: Colors.grey, size: 16)),
+                    text: "Email  : faris@gmail.com",
+                    color: Colors.grey,
+                  )),
             ),
             SizedBox(
               height: 30,
@@ -440,7 +447,7 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   settingsTile(
                       "Personal Details",
-                      ImageIcon(AssetImage("assets/icons/heart.png")),
+                      ImageIcon(AssetImage("assets/icons/user.png")),
                       Container(
                         padding: EdgeInsets.symmetric(horizontal: 20),
                         height: 205,
@@ -459,7 +466,7 @@ class ProfilePage extends StatelessWidget {
                       )),
                   settingsTile(
                       "My Orders",
-                      ImageIcon(AssetImage("assets/icons/heart.png")),
+                      ImageIcon(AssetImage("assets/icons/shopping-bag.png")),
                       Container(
                         width: MediaQuery.of(context).size.width,
                         height: 300,
@@ -475,7 +482,7 @@ class ProfilePage extends StatelessWidget {
                       )),
                   settingsTile(
                       "Shipping Address",
-                      ImageIcon(AssetImage("assets/icons/heart.png")),
+                      ImageIcon(AssetImage("assets/icons/delivery-truck.png")),
                       Container(
                         // height: 100,
                         decoration: BoxDecoration(
@@ -492,7 +499,20 @@ class ProfilePage extends StatelessWidget {
                   settingsTile(
                       "Settings",
                       ImageIcon(AssetImage("assets/icons/heart.png")),
-                      Column()),
+                      Column(
+                        children: [
+                          ListTile(
+                            leading: ImageIcon(
+                                AssetImage("assets/icons/logout.png")),
+                            title: myText(text: "Logout"),
+                          ),
+                          ListTile(
+                            leading: ImageIcon(
+                                AssetImage("assets/icons/delete-user.png")),
+                            title: myText(text: "Delete Account"),
+                          )
+                        ],
+                      )),
                 ],
               ),
             )
@@ -563,6 +583,7 @@ class ProfilePage extends StatelessWidget {
 
 Widget settingsTile(String title, ImageIcon icon, Widget widget) {
   return ExpansionTile(
+    iconColor: Colors.black,
     leading: icon,
     title: myText(text: title),
     children: [widget],

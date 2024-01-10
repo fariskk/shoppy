@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shoppy/core/common/common_widgets.dart';
@@ -44,6 +46,22 @@ class LoginScreen extends StatelessWidget {
               myButton(() {}, Colors.black, "Login", 50,
                   MediaQuery.of(context).size.width - 50, 30,
                   textcolor: Colors.white),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      width: 50,
+                      height: 1,
+                      color: Colors.grey),
+                  myText(text: "Or"),
+                  Container(
+                      margin: EdgeInsets.all(10),
+                      width: 50,
+                      height: 1,
+                      color: Colors.grey)
+                ],
+              ),
               myButton(
                   () {},
                   Color.fromRGBO(0, 74, 177, 1),
@@ -56,7 +74,11 @@ class LoginScreen extends StatelessWidget {
                   iconColor: Colors.white),
               InkWell(
                 splashColor: Colors.transparent,
-                onTap: () {},
+                onTap: () async {
+                  GoogleAuthProvider _googleAuthProvider = GoogleAuthProvider();
+                  await FirebaseAuth.instance
+                      .signInWithProvider(_googleAuthProvider);
+                },
                 child: Center(
                   child: Container(
                     height: 50,
@@ -95,9 +117,11 @@ class LoginScreen extends StatelessWidget {
               Align(
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        context.go("/signupScreen");
+                      },
                       child: Text(
-                        "Login",
+                        "Sign up",
                         style: TextStyle(fontSize: 17),
                       )))
             ],
