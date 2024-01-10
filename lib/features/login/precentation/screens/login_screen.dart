@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shoppy/core/common/common_widgets.dart';
 import 'package:shoppy/features/home/presentation/screens/home_screen.dart';
 import 'package:shoppy/features/home/presentation/widgets/home_screen_widgets.dart';
+import 'package:shoppy/features/login/precentation/bloc/login_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -75,9 +77,9 @@ class LoginScreen extends StatelessWidget {
               InkWell(
                 splashColor: Colors.transparent,
                 onTap: () async {
-                  GoogleAuthProvider _googleAuthProvider = GoogleAuthProvider();
-                  await FirebaseAuth.instance
-                      .signInWithProvider(_googleAuthProvider);
+                  context
+                      .read<LoginBloc>()
+                      .add(GoogleButtonClickedEvent(context: context));
                 },
                 child: Center(
                   child: Container(

@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shoppy/core/firebase_options.dart';
 import 'package:shoppy/core/routs/routs.dart';
 import 'package:shoppy/features/home/presentation/state/cubit/home_ui_cubit.dart';
+import 'package:shoppy/features/login/precentation/bloc/login_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +25,10 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => HomeUiCubit(),
-        )
+        ),
+        BlocProvider(
+          create: (context) => LoginBloc(),
+        ),
       ],
       child: MaterialApp.router(
           routerConfig: route,

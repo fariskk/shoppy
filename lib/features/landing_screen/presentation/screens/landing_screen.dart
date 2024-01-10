@@ -24,6 +24,7 @@ class LandingScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 myButton(() {
+                  HapticFeedback.mediumImpact();
                   context.go(
                     "/loginScreen",
                   );

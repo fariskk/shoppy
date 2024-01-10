@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shoppy/core/common/common_widgets.dart';
 
 class CategoryScreen extends StatelessWidget {
-  const CategoryScreen({super.key});
-
+  CategoryScreen({super.key, required this.title});
+  String title;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class CategoryScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              myText(text: "Bags", size: 22, fontWeight: FontWeight.bold),
+              myText(text: title, size: 22, fontWeight: FontWeight.bold),
               SizedBox(
                 height: 10,
               ),

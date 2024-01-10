@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shoppy/core/common/common_widgets.dart';
 import 'package:shoppy/features/home/presentation/state/cubit/home_ui_cubit.dart';
 import 'package:shoppy/features/home/presentation/widgets/home_screen_widgets.dart';
@@ -11,6 +12,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List pages = [HomePage(), CategoriePage(), CartPage(), ProfilePage()];
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: () {}),
       body: SafeArea(child: BlocBuilder<HomeUiCubit, HomeUiState>(
         builder: (context, state) {
           return pages[state.currentIndex];

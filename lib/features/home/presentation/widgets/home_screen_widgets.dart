@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shoppy/core/common/common_widgets.dart';
 import 'package:shoppy/features/home/presentation/screens/category_screen.dart';
 import 'package:shoppy/features/home/presentation/state/cubit/home_ui_cubit.dart';
@@ -71,10 +73,8 @@ class HomePage extends StatelessWidget {
                 Expanded(child: SizedBox()),
                 IconButton(
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProductScreen()));
+                      FirebaseAuth.instance.signOut();
+                      context.go("/");
                     },
                     icon: Icon(Icons.search))
               ],
@@ -213,36 +213,42 @@ class CategoriePage extends StatelessWidget {
           SizedBox(
             height: 5,
           ),
-          categoriTile(
-              "New arrivals", "assets/images/image2.jpg", Alignment.centerLeft),
-          categoriTile(
-              "Clothes", "assets/images/image2.jpg", Alignment.centerRight),
-          categoriTile(
-              "Bags", "assets/images/image2.jpg", Alignment.centerLeft),
-          categoriTile(
-              "Shoes", "assets/images/image2.jpg", Alignment.centerRight),
-          categoriTile(
-              "Electronics", "assets/images/image2.jpg", Alignment.centerLeft),
-          categoriTile(
-              "Jewelry", "assets/images/image2.jpg", Alignment.centerRight),
+          categoriTile("New arrivals", "assets/images/image2.jpg",
+              Alignment.centerLeft, context),
+          categoriTile("Clothes", "assets/images/image2.jpg",
+              Alignment.centerRight, context),
+          categoriTile("Bags", "assets/images/image2.jpg", Alignment.centerLeft,
+              context),
+          categoriTile("Shoes", "assets/images/image2.jpg",
+              Alignment.centerRight, context),
+          categoriTile("Electronics", "assets/images/image2.jpg",
+              Alignment.centerLeft, context),
+          categoriTile("Jewelry", "assets/images/image2.jpg",
+              Alignment.centerRight, context),
         ],
       ),
     );
   }
 }
 
-Widget categoriTile(String title, String image, Alignment alignment) {
-  return Container(
-    padding: EdgeInsets.all(20),
-    margin: EdgeInsets.symmetric(vertical: 7),
-    height: 120,
-    decoration: BoxDecoration(
-        image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
-        borderRadius: BorderRadius.all(Radius.circular(20))),
-    width: double.infinity,
-    child: Align(
-      alignment: alignment,
-      child: myText(text: title, size: 22, fontWeight: FontWeight.bold),
+Widget categoriTile(
+    String title, String image, Alignment alignment, BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      context.go("/homeScreen/categoryScreen", extra: {"title": title});
+    },
+    child: Container(
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.symmetric(vertical: 7),
+      height: 120,
+      decoration: BoxDecoration(
+          image: DecorationImage(image: AssetImage(image), fit: BoxFit.cover),
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      width: double.infinity,
+      child: Align(
+        alignment: alignment,
+        child: myText(text: title, size: 22, fontWeight: FontWeight.bold),
+      ),
     ),
   );
 }
