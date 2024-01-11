@@ -7,6 +7,7 @@ import 'package:shoppy/core/firebase_options.dart';
 import 'package:shoppy/core/routs/routs.dart';
 import 'package:shoppy/features/home/presentation/state/cubit/home_ui_cubit.dart';
 import 'package:shoppy/features/login/precentation/bloc/login_bloc.dart';
+import 'package:shoppy/features/sign_up/presentation/bloc/signup_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +29,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => LoginBloc(),
+        ),
+        BlocProvider(
+          create: (context) => SignupBloc(),
         ),
       ],
       child: MaterialApp.router(
