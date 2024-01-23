@@ -13,7 +13,7 @@ Container colorIcon(Color color, Color selectedColor) {
       child: color == selectedColor
           ? Icon(
               Icons.done,
-              color: Colors.grey,
+              color: const Color.fromARGB(255, 193, 190, 190),
             )
           : null,
     ),

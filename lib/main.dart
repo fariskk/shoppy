@@ -5,8 +5,11 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shoppy/core/firebase_options.dart';
 import 'package:shoppy/core/routs/routs.dart';
+import 'package:shoppy/features/home/presentation/state/bloc/home_bloc.dart';
 import 'package:shoppy/features/home/presentation/state/cubit/home_ui_cubit.dart';
 import 'package:shoppy/features/login/precentation/bloc/login_bloc.dart';
+import 'package:shoppy/features/payment/bloc/payment_bloc.dart';
+import 'package:shoppy/features/product_display/presentation/bloc/product_bloc.dart';
 import 'package:shoppy/features/sign_up/presentation/bloc/signup_bloc.dart';
 
 void main() async {
@@ -28,10 +31,19 @@ class MyApp extends StatelessWidget {
           create: (context) => HomeUiCubit(),
         ),
         BlocProvider(
+          create: (context) => HomeBloc(),
+        ),
+        BlocProvider(
           create: (context) => LoginBloc(),
         ),
         BlocProvider(
           create: (context) => SignupBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ProductBloc(),
+        ),
+        BlocProvider(
+          create: (context) => PaymentBloc(),
         ),
       ],
       child: MaterialApp.router(

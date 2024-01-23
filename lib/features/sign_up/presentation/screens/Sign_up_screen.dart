@@ -116,30 +116,37 @@ class SignupScreen extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              myButton(() {
-                if (_passwordContrtoller.text.isNotEmpty &&
-                    _conformPasswordController.text ==
-                        _passwordContrtoller.text) {
-                  context.read<SignupBloc>().add(SignupButtonClickedEvent(
-                      context: context,
-                      email: _emailController.text,
-                      password: _passwordContrtoller.text));
-                } else {}
-              }, Colors.black, "sign Up", 50,
-                  MediaQuery.of(context).size.width - 50, 30,
-                  textcolor: Colors.white),
-              Row(
-                children: [
-                  Checkbox(value: false, onChanged: (value) {}),
-                  Container(
-                    width: MediaQuery.of(context).size.width - 100,
-                    child: myText(
-                        size: 15,
-                        text:
-                            "By creating an a account you have to agree with our terms and conditions"),
-                  )
-                ],
-              )
+              BlocBuilder<SignupBloc, SignupState>(
+                builder: (context, state) {
+                  if (state is LoadingState) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width - 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: Center(
+                        child: CircularProgressIndicator(color: Colors.white),
+                      ),
+                    );
+                  }
+                  return myButton(() {
+                    if (_passwordContrtoller.text.isNotEmpty &&
+                        _conformPasswordController.text ==
+                            _passwordContrtoller.text) {
+                      context.read<SignupBloc>().add(SignupButtonClickedEvent(
+                          context: context,
+                          email: _emailController.text,
+                          password: _passwordContrtoller.text));
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("plaes provide a email and password")));
+                    }
+                  }, Colors.black, "sign Up", 50,
+                      MediaQuery.of(context).size.width - 50, 30,
+                      textcolor: Colors.white);
+                },
+              ),
             ],
           ),
         ),

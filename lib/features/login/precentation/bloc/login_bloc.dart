@@ -11,7 +11,7 @@ part 'login_state.dart';
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   LoginBloc() : super(LoginInitial()) {
     on<GoogleButtonClickedEvent>((event, emit) async {
-      emit(LoadingState());
+      emit(GoogleLoadingState());
       try {
         GoogleAuthProvider _googleAuthProvider = GoogleAuthProvider();
         final fir = FirebaseFirestore.instance.collection("users");
@@ -19,11 +19,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         String email = FirebaseAuth.instance.currentUser!.email!;
         fir.doc(email).get().then((value) {
           if (!value.exists) {
-            print("exists");
             fir.doc(email).set({
               "email": email,
-              "my_orders": ["test2"],
-              "my_favourites": []
+              "my_orders": [],
+              "my_favourites": [],
+              "my_cart": [],
+              "adress": {}
             });
           }
         });
@@ -32,9 +33,25 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             .showSnackBar(SnackBar(content: Text("Logged in Successfully")));
         event.context.go("/homeScreen");
         emit(LoginSuccessState());
-      } catch (e) {
-        print("**********///////////////**************");
-        print(e);
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(event.context)
+            .showSnackBar(SnackBar(content: Text(e.message ?? e.code)));
+        emit(LoginSFaildState());
+      }
+    });
+
+    on<LoginButtonClickedEvent>((event, emit) async {
+      try {
+        emit(LoadingState());
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+            email: event.Email, password: event.password);
+        ScaffoldMessenger.of(event.context)
+            .showSnackBar(SnackBar(content: Text("Logged in successfully")));
+        event.context.go("/homeScreen");
+        emit(LoginSuccessState());
+      } on FirebaseAuthException catch (e) {
+        ScaffoldMessenger.of(event.context)
+            .showSnackBar(SnackBar(content: Text(e.message ?? e.code)));
         emit(LoginSFaildState());
       }
     });

@@ -50,6 +50,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
 
     on<SignupButtonClickedEvent>((event, emit) async {
       try {
+        emit(LoadingState());
         final fir = FirebaseFirestore.instance.collection("users");
 
         if (verifiedEmail != null) {
@@ -57,19 +58,25 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
               email: verifiedEmail!, password: event.password);
           await FirebaseAuth.instance.signInWithEmailAndPassword(
               email: verifiedEmail!, password: event.password);
-          await fir.doc(event.email).set(
-              {"email": verifiedEmail, "my_orders": [], "my_favourites": []});
+          await fir.doc(event.email).set({
+            "email": verifiedEmail,
+            "my_orders": [],
+            "my_favourites": [],
+            "my_cart": [],
+            "adress": {}
+          });
           ScaffoldMessenger.of(event.context)
               .showSnackBar(SnackBar(content: Text("Logged in Successfully")));
           event.context.go("/homeScreen");
+          emit(SignupsuccessState());
         } else {
+          emit(SignupfaildState());
           ScaffoldMessenger.of(event.context).showSnackBar(
               SnackBar(content: Text("  Plaease verify your email")));
         }
       } on FirebaseAuthException catch (e) {
-        print(e.message);
-        print(e.code);
-        print(verifiedEmail);
+        verifiedEmail = null;
+        emit(SignupfaildState());
         ScaffoldMessenger.of(event.context)
             .showSnackBar(SnackBar(content: Text(e.message ?? e.code)));
       }

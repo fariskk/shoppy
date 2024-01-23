@@ -10,7 +10,8 @@ import 'package:shoppy/features/login/precentation/bloc/login_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
-
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,11 +34,13 @@ class LoginScreen extends StatelessWidget {
                 height: 30,
               ),
               TextField(
+                controller: _emailController,
                 decoration: InputDecoration(
                     labelText: "Email",
                     labelStyle: TextStyle(fontSize: 22, color: Colors.black)),
               ),
               TextField(
+                controller: _passwordController,
                 decoration: InputDecoration(
                     labelText: "Password",
                     labelStyle: TextStyle(fontSize: 22, color: Colors.black)),
@@ -45,9 +48,21 @@ class LoginScreen extends StatelessWidget {
               SizedBox(
                 height: 10,
               ),
-              myButton(() {}, Colors.black, "Login", 50,
-                  MediaQuery.of(context).size.width - 50, 30,
-                  textcolor: Colors.white),
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  if (state is LoadingState) {
+                    return loginLoadingButton(context);
+                  }
+                  return myButton(() {
+                    context.read<LoginBloc>().add(LoginButtonClickedEvent(
+                        context: context,
+                        password: _passwordController.text,
+                        Email: _emailController.text));
+                  }, Colors.black, "Login", 50,
+                      MediaQuery.of(context).size.width - 50, 30,
+                      textcolor: Colors.white);
+                },
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -76,7 +91,7 @@ class LoginScreen extends StatelessWidget {
                   iconColor: Colors.white),
               BlocBuilder<LoginBloc, LoginState>(
                 builder: (context, state) {
-                  if (state is LoadingState) {
+                  if (state is GoogleLoadingState) {
                     return loginLoadingButton(context);
                   }
                   return googleLogiinButton(context);
