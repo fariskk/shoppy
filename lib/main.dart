@@ -8,6 +8,7 @@ import 'package:shoppy/core/routs/routs.dart';
 import 'package:shoppy/features/home/presentation/state/bloc/home_bloc.dart';
 import 'package:shoppy/features/home/presentation/state/cubit/home_ui_cubit.dart';
 import 'package:shoppy/features/login/precentation/bloc/login_bloc.dart';
+import 'package:shoppy/features/my_order/presentation/bloc/my_order_bloc.dart';
 import 'package:shoppy/features/payment/bloc/payment_bloc.dart';
 import 'package:shoppy/features/product_display/presentation/bloc/product_bloc.dart';
 import 'package:shoppy/features/sign_up/presentation/bloc/signup_bloc.dart';
@@ -44,6 +45,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => PaymentBloc(),
+        ),
+        BlocProvider(
+          create: (context) => MyOrderBloc(),
         ),
       ],
       child: MaterialApp.router(

@@ -24,3 +24,15 @@ class DeleteCartItemButtonClickedEvent extends HomeEvent {
   int index;
   DeleteCartItemButtonClickedEvent({required this.index, required this.myCart});
 }
+
+class ProceedToPaymentButtonClickedEvent extends HomeEvent {
+  Map shippingAddres;
+  List myCart;
+  double amount;
+  BuildContext context;
+  ProceedToPaymentButtonClickedEvent(
+      {required this.amount,
+      required this.myCart,
+      required this.shippingAddres,
+      required this.context});
+}

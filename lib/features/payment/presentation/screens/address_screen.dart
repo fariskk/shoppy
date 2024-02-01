@@ -5,9 +5,10 @@ import 'package:shoppy/core/common/common_widgets.dart';
 import 'package:shoppy/features/payment/bloc/payment_bloc.dart';
 
 class AddressScreen extends StatelessWidget {
-  AddressScreen({super.key, required this.amount, required this.myCart});
-  List myCart;
-  double amount;
+  AddressScreen({
+    super.key,
+  });
+
   TextEditingController _streetController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
   TextEditingController _DistrictController = TextEditingController();
@@ -91,17 +92,13 @@ class AddressScreen extends StatelessWidget {
                     "zip": _zipCodeController.text,
                     "phone": _phoneNumberController.text
                   };
-                  context.read<PaymentBloc>().add(
-                      ProceedToPaymentButtonClickedEvent(
-                          amount: amount,
-                          context: context,
-                          myCart: myCart,
-                          shippingAddres: shippingAdress));
+                  context.read<PaymentBloc>().add(NextButtonClickedEvent(
+                      context: context, address: shippingAdress));
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text("Enter your address")));
                 }
-              }, Colors.black, "Proceed to Payment", 50,
+              }, Colors.black, "NEXT", 50,
                       MediaQuery.of(context).size.width - 50, 30,
                       textcolor: Colors.white)),
               SizedBox(

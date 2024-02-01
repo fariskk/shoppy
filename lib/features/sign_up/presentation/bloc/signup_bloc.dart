@@ -63,7 +63,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
             "my_orders": [],
             "my_favourites": [],
             "my_cart": [],
-            "adress": {}
+            "address": {}
           });
           ScaffoldMessenger.of(event.context)
               .showSnackBar(SnackBar(content: Text("Logged in Successfully")));

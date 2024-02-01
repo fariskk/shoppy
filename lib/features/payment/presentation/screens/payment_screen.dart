@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:shoppy/core/common/common_widgets.dart';
 import 'package:shoppy/features/home/presentation/widgets/home_screen_widgets.dart';
@@ -8,14 +10,14 @@ import 'package:shoppy/features/payment/bloc/payment_bloc.dart';
 import 'package:shoppy/features/payment/presentation/widgets/payment_widgets.dart';
 
 class PaymentScreen extends StatelessWidget {
-  PaymentScreen(
-      {super.key,
-      required this.amount,
-      required this.myCart,
-      required this.address});
+  PaymentScreen({
+    super.key,
+    required this.amount,
+    required this.myCart,
+  });
   List myCart;
   double amount;
-  Map address;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,16 +53,33 @@ class PaymentScreen extends StatelessWidget {
                             spreadRadius: 5,
                             color: const Color.fromARGB(255, 222, 221, 221))
                       ]),
-                  child: Column(
-                    children: [
-                      addressWidget("Street", address["street"]),
-                      addressWidget("City", address["city"]),
-                      addressWidget("District", address["district"]),
-                      addressWidget("State", address["state"]),
-                      addressWidget("Zip", address["zip"]),
-                      addressWidget("Phone", address["phone"]),
-                    ],
-                  ),
+                  child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(FirebaseAuth.instance.currentUser!.email)
+                          .snapshots(),
+                      builder: (context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          Map address = snapshot.data["address"];
+                          return Column(
+                            children: [
+                              addressWidget("Street", address["street"]),
+                              addressWidget("City", address["city"]),
+                              addressWidget("District", address["district"]),
+                              addressWidget("State", address["state"]),
+                              addressWidget("Zip", address["zip"]),
+                              addressWidget("Phone", address["phone"]),
+                              TextButton(
+                                  onPressed: () {
+                                    context.push(
+                                        "/homeScreen/paymentScreen/addressScreen");
+                                  },
+                                  child: Text("Change Address"))
+                            ],
+                          );
+                        }
+                        return Center(child: CircularProgressIndicator());
+                      }),
                 ),
                 SizedBox(
                   height: 30,
@@ -104,16 +123,22 @@ class PaymentScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       myText(text: "Total : ₹ $amount"),
-                      myButton(() {
+                      myButton(() async {
+                        final usersData = await FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(FirebaseAuth.instance.currentUser!.email)
+                            .get();
+
+                        // ignore: use_build_context_synchronously
                         context.read<PaymentBloc>().add(
+                                // ignore: use_build_context_synchronously
                                 PlaceOrderButtonClickedEvent(
                                     amount: amount,
                                     context: context,
                                     orderDetails: {
-                                  "name": FirebaseAuth
-                                          .instance.currentUser?.email ??
-                                      "NO USER",
-                                  "address": address,
+                                  "name":
+                                      FirebaseAuth.instance.currentUser?.email,
+                                  "address": usersData.data()!["address"],
                                   "status": "orderd",
                                   "items": myCart,
                                 }));

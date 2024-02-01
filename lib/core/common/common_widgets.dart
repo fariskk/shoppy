@@ -15,10 +15,10 @@ Widget myText(
         FontWeight fontWeight = FontWeight.normal}) =>
     Text(text,
         style: TextStyle(
-          fontSize: size,
-          color: color,
-          fontWeight: fontWeight,
-        ));
+            fontSize: size,
+            color: color,
+            fontWeight: fontWeight,
+            overflow: TextOverflow.ellipsis));
 
 Widget myButton(Function onPressed, Color backGroundColor, String text,
     double height, double width, double borderRadius,

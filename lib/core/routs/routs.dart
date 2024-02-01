@@ -5,6 +5,7 @@ import 'package:shoppy/features/home/presentation/screens/home_screen.dart';
 
 import 'package:shoppy/features/landing_screen/presentation/screens/landing_screen.dart';
 import 'package:shoppy/features/login/precentation/screens/login_screen.dart';
+import 'package:shoppy/features/my_order/presentation/screens/my_order_screen.dart';
 import 'package:shoppy/features/payment/presentation/screens/address_screen.dart';
 import 'package:shoppy/features/payment/presentation/screens/payment_screen.dart';
 import 'package:shoppy/features/product_display/presentation/screens/product-screen.dart';
@@ -54,48 +55,47 @@ GoRouter route = GoRouter(
                       }),
                 ]),
             GoRoute(
-                path: "addressScreen",
+                path: "paymentScreen",
                 builder: (context, state) {
                   Map _params = state.extra as Map;
-                  return AddressScreen(
+                  return PaymentScreen(
                     amount: _params["amount"],
                     myCart: _params["my_cart"],
                   );
                 },
                 routes: [
                   GoRoute(
-                    path: "paymentScreen",
+                    path: "addressScreen",
                     builder: (context, state) {
-                      Map _params = state.extra as Map;
-                      return PaymentScreen(
-                        amount: _params["amount"],
-                        myCart: _params["my_cart"],
-                        address: _params["address"],
-                      );
+                      return AddressScreen();
                     },
-                  ),
+                  )
                 ]),
             GoRoute(
-              path: "paymentScreen",
+              path: "addressScreen",
               builder: (context, state) {
-                Map _params = state.extra as Map;
-                return PaymentScreen(
-                  amount: _params["amount"],
-                  myCart: _params["my_cart"],
-                  address: _params["address"],
-                );
+                return AddressScreen();
               },
             ),
-          ]),
-      GoRoute(
-          path: "/successScreen",
-          builder: (context, state) {
-            Map params = state.extra as Map<String, dynamic>;
+            GoRoute(
+                path: "successScreen",
+                builder: (context, state) {
+                  Map params = state.extra as Map<String, dynamic>;
 
-            return SuccessScreen(
-              message: params["message"]!,
-              nextRout: params["nextRout"]!,
-              buttonText: params["buttonText"]!,
-            );
-          })
+                  return SuccessScreen(
+                    message: params["message"]!,
+                    nextRout: params["next_rout"]!,
+                    buttonText: params["button_text"]!,
+                  );
+                }),
+            GoRoute(
+                path: "myorderScreen",
+                builder: (context, state) {
+                  Map _myOrderItemDetails = state.extra as Map<String, dynamic>;
+
+                  return MyOrderScreen(
+                    myOrderItemDetails: _myOrderItemDetails,
+                  );
+                })
+          ]),
     ]);

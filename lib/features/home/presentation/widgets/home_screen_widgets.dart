@@ -186,7 +186,7 @@ class HomePage extends StatelessWidget {
                                                   fit: BoxFit.cover,
                                                   image: NetworkImage(
                                                       newArrivalItem["image"])),
-                                              color: Colors.amber,
+                                              color: Colors.white,
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(15))),
                                         ),
@@ -466,7 +466,7 @@ class CartPage extends StatelessWidget {
       child: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .doc(FirebaseAuth.instance.currentUser!.email ?? "")
+              .doc(FirebaseAuth.instance.currentUser!.email)
               .snapshots(),
           builder: (context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
@@ -529,17 +529,38 @@ class CartPage extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (myAddress.isEmpty) {
-                        context.go("/homeScreen/addressScreen", extra: {
-                          "my_cart": myCart,
-                          "amount": total,
-                        });
+                      if (myCart.length == 0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text("your cart is empty")));
+                      } else if (myAddress.isEmpty) {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                content: Text(
+                                    "Your Shipping Address hasn't been Updated,\n\nUpdate your Address to Continue"),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () {
+                                        context.pop();
+                                      },
+                                      child: Text("Cancel")),
+                                  TextButton(
+                                      onPressed: () {
+                                        context.pop();
+                                        context.go("/homeScreen/addressScreen");
+                                      },
+                                      child: Text("Update"))
+                                ],
+                              );
+                            });
                       } else {
-                        context.go("/homeScreen/paymentScreen", extra: {
-                          "my_cart": myCart,
-                          "amount": total,
-                          "address": myAddress,
-                        });
+                        context.read<HomeBloc>().add(
+                            ProceedToPaymentButtonClickedEvent(
+                                amount: total,
+                                context: context,
+                                myCart: myCart,
+                                shippingAddres: myAddress));
                       }
                     },
                     child: Container(
@@ -577,8 +598,10 @@ class CartPage extends StatelessWidget {
 Widget cartItem(Map mycartItem, int index, List myCart, BuildContext context) {
   return GestureDetector(
     onTap: () {
-      context.go("/homeScreen/productScreen",
-          extra: {"product_id": mycartItem["id"], "offer_price": -1});
+      context.go("/homeScreen/productScreen", extra: {
+        "product_id": mycartItem["id"],
+        "offer_price": mycartItem["price"]
+      });
     },
     child: Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -810,7 +833,31 @@ class ProfilePage extends StatelessWidget {
                                     child: myText(text: "No Items"),
                                   );
                                 }
-                                return productTile(myOrders);
+
+                                return ListView.builder(
+                                    itemCount: myOrders.length,
+                                    itemBuilder: (context, index) {
+                                      List items = myOrders[index]["items"];
+                                      String productsText =
+                                          items.map((e) => e["name"]).join(",");
+                                      return Card(
+                                        child: ListTile(
+                                          title: myText(
+                                              text: myOrders[index]["name"],
+                                              size: 14,
+                                              fontWeight: FontWeight.bold),
+                                          subtitle: Text(productsText),
+                                          trailing: TextButton(
+                                            child: Text("View Details"),
+                                            onPressed: () {
+                                              context.go(
+                                                  "/homeScreen/myorderScreen",
+                                                  extra: myOrders[index]);
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    });
                               }
                               return Center(
                                 child: CircularProgressIndicator(),
@@ -856,7 +903,9 @@ class ProfilePage extends StatelessWidget {
                             if (snapshot.hasData) {
                               if (snapshot.data["address"].isEmpty) {
                                 return TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      context.go("/homeScreen/addressScreen");
+                                    },
                                     child: Text("Add your address"));
                               } else {
                                 Map myAddress = snapshot.data["address"];
@@ -890,7 +939,10 @@ class ProfilePage extends StatelessWidget {
                                             Icons.edit,
                                             color: Colors.blue,
                                           ),
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            context.go(
+                                                "/homeScreen/addressScreen");
+                                          },
                                         ),
                                       )
                                     ],
@@ -910,18 +962,33 @@ class ProfilePage extends StatelessWidget {
                         children: [
                           ListTile(
                             onTap: () {
-                              FirebaseAuth.instance.signOut();
-                              context.go("/");
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text("Logout ?"),
+                                      content:
+                                          Text("Are sure you want to logout"),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () {
+                                              context.pop();
+                                            },
+                                            child: Text("Cancel")),
+                                        TextButton(
+                                            onPressed: () {
+                                              FirebaseAuth.instance.signOut();
+                                              context.go("/");
+                                            },
+                                            child: Text("Ok"))
+                                      ],
+                                    );
+                                  });
                             },
                             leading: ImageIcon(
                                 AssetImage("assets/icons/logout.png")),
                             title: myText(text: "Logout"),
                           ),
-                          ListTile(
-                            leading: ImageIcon(
-                                AssetImage("assets/icons/delete-user.png")),
-                            title: myText(text: "Delete Account"),
-                          )
                         ],
                       )),
                 ],
@@ -940,6 +1007,12 @@ class ProfilePage extends StatelessWidget {
           Map myOrdersItem = products[index];
           return Card(
             child: ListTile(
+              onTap: () {
+                context.go("/homeScreen/productScreen", extra: {
+                  "product_id": myOrdersItem["id"],
+                  "offer_price": -1
+                });
+              },
               onLongPress: () {
                 showDialog(
                     context: context,

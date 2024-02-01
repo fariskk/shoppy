@@ -268,7 +268,9 @@ class ProductScreen extends StatelessWidget {
                                           "id": productDetails["id"],
                                           "image": productDetails["images"][0],
                                           "name": productDetails["name"],
-                                          "price": productDetails["price"],
+                                          "price": offersPrice == -1
+                                              ? productDetails["price"]
+                                              : offersPrice,
                                           "size": selectedSize,
                                         }));
                               } else {
@@ -309,10 +311,7 @@ class ProductScreen extends StatelessWidget {
                   ),
                   Align(
                       alignment: Alignment.topRight,
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.favorite),
-                      ))
+                      child: favoriteButton(productId))
                 ]),
               );
             }

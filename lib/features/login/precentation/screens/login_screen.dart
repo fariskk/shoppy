@@ -79,13 +79,11 @@ class LoginScreen extends StatelessWidget {
                       color: Colors.grey)
                 ],
               ),
-              myButton(
-                  () {},
-                  Color.fromRGBO(0, 74, 177, 1),
-                  "Continue with facebook",
-                  50,
-                  MediaQuery.of(context).size.width - 50,
-                  30,
+              myButton(() {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("facebook login currently unavailable")));
+              }, Color.fromRGBO(0, 74, 177, 1), "Continue with facebook", 50,
+                  MediaQuery.of(context).size.width - 50, 30,
                   textcolor: Colors.white,
                   icon: Icons.facebook,
                   iconColor: Colors.white),

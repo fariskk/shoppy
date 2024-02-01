@@ -24,7 +24,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
               "my_orders": [],
               "my_favourites": [],
               "my_cart": [],
-              "adress": {}
+              "address": {}
             });
           }
         });
